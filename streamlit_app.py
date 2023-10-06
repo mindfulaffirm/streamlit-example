@@ -1,6 +1,7 @@
 import streamlit as st
 import numpy as np
 
+# Function to set custom button styling for square buttons
 def set_button_style():
     st.markdown(
         """
@@ -12,12 +13,12 @@ def set_button_style():
                 display: flex;
                 justify-content: center;
                 align-items: center;
+                margin: 10px;     /* Space around the button */
             }
         </style>
         """,
         unsafe_allow_html=True
     )
-
 
 # Function to calculate entropy of the sequence
 def calculate_entropy(sequence):
@@ -42,11 +43,12 @@ if 'entropy_vals' not in st.session_state:
 
 # Display 3x3 grid and handle box clicks
 for i in range(3):
-    cols = st.columns(3)
-    for j in range(3):
-        with cols[j]:
-            if st.button(f"Box {3*i + j + 1}"):
-                st.session_state.sequence.append(3*i + j + 1)
+    cols = st.columns([1,0.1,1,0.1,1])  # 5 columns: box-space-box-space-box
+    box_indices = [3*i, 3*i+1, 3*i+2]
+    for j, idx in enumerate(box_indices):
+        with cols[j*2]:  # We skip the "space" columns
+            if st.button(f"Box {idx + 1}"):
+                st.session_state.sequence.append(idx + 1)
                 entropy = calculate_entropy(st.session_state.sequence)
                 st.session_state.entropy_vals.append(entropy)
 
