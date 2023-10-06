@@ -1,64 +1,48 @@
 import streamlit as st
-import numpy as np
+import openai
 
-# Function to set custom button styling for square buttons
-def set_button_style():
-    st.markdown(
-        """
-        <style>
-            .stButton > button {
-                width: 100px;     /* Width of the square button */
-                height: 100px;    /* Height of the square button */
-                font-size: 1.2em;
-                display: flex;
-                justify-content: center;
-                align-items: center;
-                margin: 10px;     /* Space around the button */
-            }
-        </style>
-        """,
-        unsafe_allow_html=True
+# OpenAI API key
+API_KEY = "YOUR_OPENAI_API_KEY"
+
+# OpenAI settings
+openai.api_key = API_KEY
+
+def chatGPT(query):
+    response = openai.Completion.create(
+        engine="davinci",
+        prompt=query,
+        max_tokens=150,
+        n=1,
+        stop=". ",
+        temperature=0.7
     )
+    return response.choices[0].text.strip()
 
-# Function to calculate entropy of the sequence
-def calculate_entropy(sequence):
-    if len(sequence) == 0:
-        return 0
-    values, counts = np.unique(sequence, return_counts=True)
-    probs = counts / len(sequence)
-    entropy = -np.sum(probs * np.log2(probs))
-    return entropy
+st.title("Learning Buddy")
 
-# Apply button styling
-set_button_style()
+# Display buttons and handle their functionality
+if st.button('START'):
+    prompt = ("Clear all the past memory. Pretend You are me, and I am you, chatGPT. "
+              "Keep asking me questions after I answer. The topic is about learning Python programming. "
+              "Start with some greetings and an easy question. remember to encourage me along the way. "
+              "keep your text short. not more than 15 words")
+    response = chatGPT(prompt)
+    st.write(f"**Learning Buddy:** {response}")
 
-# App title
-st.title("3x3 Box Entropy Calculator")
+if st.button('Too difficult!'):
+    prompt = "Too difficult"
+    response = chatGPT(prompt)
+    st.write(f"**Learning Buddy:** {response}")
 
-# State management for Streamlit
-if 'sequence' not in st.session_state:
-    st.session_state.sequence = []
-if 'entropy_vals' not in st.session_state:
-    st.session_state.entropy_vals = []
+if st.button('Too easy!'):
+    prompt = "Too easy."
+    response = chatGPT(prompt)
+    st.write(f"**Learning Buddy:** {response}")
 
-# Display 3x3 grid and handle box clicks
-for i in range(3):
-    cols = st.columns([1,0.1,1,0.1,1])  # 5 columns: box-space-box-space-box
-    box_indices = [3*i, 3*i+1, 3*i+2]
-    for j, idx in enumerate(box_indices):
-        with cols[j*2]:  # We skip the "space" columns
-            if st.button(f"Box {idx + 1}"):
-                st.session_state.sequence.append(idx + 1)
-                entropy = calculate_entropy(st.session_state.sequence)
-                st.session_state.entropy_vals.append(entropy)
-
-# Display recorded sequence
-st.write(f"Sequence: {st.session_state.sequence}")
-
-# Plot the change in entropy
-st.line_chart(st.session_state.entropy_vals, use_container_width=True, height=300)
-
-# A button to reset the sequence
-if st.button("Reset Sequence"):
-    st.session_state.sequence = []
-    st.session_state.entropy_vals = []
+# Chat input
+query = st.text_input('Continue your conversation...')
+if st.button('Chat'):
+    if query:
+        response = chatGPT(query)
+        st.write(f"**Me:** {query}")
+        st.write(f"**Learning Buddy:** {response}")
