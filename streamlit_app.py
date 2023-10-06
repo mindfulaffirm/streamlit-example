@@ -2,7 +2,7 @@ import streamlit as st
 import openai
 
 # Set up OpenAI GPT-3 API
-openai.api_key = 'YOUR_OPENAI_API_KEY'
+openai.api_key = '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'
 
 def get_gpt3_response(prompt):
     """Function to get GPT-3's response to a given prompt."""
