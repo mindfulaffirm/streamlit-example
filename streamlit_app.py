@@ -1,48 +1,15 @@
 import streamlit as st
-import openai
 
-# OpenAI API key
-API_KEY = "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"
+# Initializing session state variables if they don't exist
+if 'button1_color' not in st.session_state:
+    st.session_state.button1_color = 'primary'
+if 'button2_color' not in st.session_state:
+    st.session_state.button2_color = 'primary'
 
-# OpenAI settings
-openai.api_key = API_KEY
+# If Button 1 is clicked, toggle its color
+if st.button('Button 1', key='btn1', on_click=lambda: setattr(st.session_state, 'button1_color', 'danger' if st.session_state.button1_color == 'primary' else 'primary'), color=st.session_state.button1_color):
+    st.write('Button 1 clicked!')
 
-def chatGPT(query):
-    response = openai.Completion.create(
-        engine="davinci",
-        prompt=query,
-        max_tokens=150,
-        n=1,
-        stop=". ",
-        temperature=0.7
-    )
-    return response.choices[0].text.strip()
-
-st.title("Learning Buddy")
-
-# Display buttons and handle their functionality
-if st.button('START'):
-    prompt = ("Clear all the past memory. Pretend You are me, and I am you, chatGPT. "
-              "Keep asking me questions after I answer. The topic is about learning Python programming. "
-              "Start with some greetings and an easy question. remember to encourage me along the way. "
-              "keep your text short. not more than 15 words")
-    response = chatGPT(prompt)
-    st.write(f"**Learning Buddy:** {response}")
-
-if st.button('Too difficult!'):
-    prompt = "Too difficult"
-    response = chatGPT(prompt)
-    st.write(f"**Learning Buddy:** {response}")
-
-if st.button('Too easy!'):
-    prompt = "Too easy."
-    response = chatGPT(prompt)
-    st.write(f"**Learning Buddy:** {response}")
-
-# Chat input
-query = st.text_input('Continue your conversation...')
-if st.button('Chat'):
-    if query:
-        response = chatGPT(query)
-        st.write(f"**Me:** {query}")
-        st.write(f"**Learning Buddy:** {response}")
+# If Button 2 is clicked, toggle its color
+if st.button('Button 2', key='btn2', on_click=lambda: setattr(st.session_state, 'button2_color', 'danger' if st.session_state.button2_color == 'primary' else 'primary'), color=st.session_state.button2_color):
+    st.write('Button 2 clicked!')
