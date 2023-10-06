@@ -31,7 +31,7 @@ def get_gpt3_response_from_azure(prompt):
     response_json = response.json()
 
     # Extract and return the response text from the JSON response (adjust as per Azure's response structure)
-    return response_json['choices'][0]['text'].strip()
+    return response_json['choices'][0]['message']['content']
 
 def main():
     st.title("Chat Simulation with Azure OpenAI GPT-3")
