@@ -2,20 +2,31 @@ import streamlit as st
 import requests
 
 # Set up Azure OpenAI API endpoint and key
-AZURE_ENDPOINT = 'https://nie-gpt.openai.azure.com/openai/deployments/GPT_35_TURBO/chat/completions?api-version=2023-06-01-preview&api-key=250783a2a3ed4cbe93dd0d7d2c443144'  # Replace with your endpoint
+AZURE_ENDPOINT = 'https://nie-gpt.openai.azure.com/openai/deployments/GPT_4/chat/completions?api-version=2023-06-01-preview&api-key=250783a2a3ed4cbe93dd0d7d2c443144'  # Replace with your endpoint
 AZURE_API_KEY = '250783a2a3ed4cbe93dd0d7d2c443144'  # Replace with your key
 
 headers = {
-    "Authorization": f"Bearer {AZURE_API_KEY}",
     "Content-Type": "application/json"
 }
 
 def get_gpt3_response_from_azure(prompt):
     """Function to get GPT-3's response from Azure's OpenAI service."""
     data = {
-        "prompt": prompt,
-        "max_tokens": 150
-    }
+    "model": "gpt-4",
+    "messages": [
+        {
+            "role": "system",
+            "content": "You are a helpful assistant."
+        },
+        {
+            "role": "user",
+            "content": "How are you doing today?"
+        }
+    ],
+    "temperature": 0.7,
+    "top_p": 1,
+    "max_tokens": 256
+}
     response = requests.post(AZURE_ENDPOINT, headers=headers, json=data)
     response_json = response.json()
 
