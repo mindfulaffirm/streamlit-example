@@ -1,21 +1,23 @@
 import streamlit as st
 import numpy as np
 
-# Function to set custom button styling
 def set_button_style():
     st.markdown(
         """
         <style>
             .stButton > button {
-                width: 100%;
-                height: 100%;
-                padding: 1em 1em;
+                width: 100px;     /* Width of the square button */
+                height: 100px;    /* Height of the square button */
                 font-size: 1.2em;
+                display: flex;
+                justify-content: center;
+                align-items: center;
             }
         </style>
         """,
         unsafe_allow_html=True
     )
+
 
 # Function to calculate entropy of the sequence
 def calculate_entropy(sequence):
