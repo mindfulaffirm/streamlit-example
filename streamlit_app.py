@@ -16,31 +16,29 @@ def calculate_entropy(sequence):
 # App title
 st.title("3x3 Box Entropy Calculator")
 
-# State management for Streamlit (to remember the sequence across reruns)
+# State management for Streamlit
 if 'sequence' not in st.session_state:
     st.session_state.sequence = []
+if 'entropy_vals' not in st.session_state:
+    st.session_state.entropy_vals = []
 
 # Display 3x3 grid and handle box clicks
 for i in range(3):
-    col1, col2, col3 = st.columns(3)  # Note the change here
-    with col1:
-        if st.button(f"Box {3*i + 1}"):
-            st.session_state.sequence.append(3*i + 1)
-    with col2:
-        if st.button(f"Box {3*i + 2}"):
-            st.session_state.sequence.append(3*i + 2)
-    with col3:
-        if st.button(f"Box {3*i + 3}"):
-            st.session_state.sequence.append(3*i + 3)
-
+    cols = st.columns(3)
+    for j in range(3):
+        with cols[j]:
+            if st.button(f"Box {3*i + j + 1}"):
+                st.session_state.sequence.append(3*i + j + 1)
+                entropy = calculate_entropy(st.session_state.sequence)
+                st.session_state.entropy_vals.append(entropy)
 
 # Display recorded sequence
 st.write(f"Sequence: {st.session_state.sequence}")
 
-# Calculate and display entropy
-entropy = calculate_entropy(st.session_state.sequence)
-st.write(f"Entropy: {entropy}")
+# Plot the change in entropy
+st.line_chart(st.session_state.entropy_vals, use_container_width=True, height=300)
 
-# A button to reset the sequence if needed
+# A button to reset the sequence
 if st.button("Reset Sequence"):
     st.session_state.sequence = []
+    st.session_state.entropy_vals = []
