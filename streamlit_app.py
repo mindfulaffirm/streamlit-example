@@ -1,17 +1,32 @@
 import streamlit as st
 import numpy as np
 
+# Function to set custom button styling
+def set_button_style():
+    st.markdown(
+        """
+        <style>
+            .stButton > button {
+                width: 100%;
+                padding: 1em 1em;
+                font-size: 1.2em;
+            }
+        </style>
+        """,
+        unsafe_allow_html=True
+    )
+
 # Function to calculate entropy of the sequence
 def calculate_entropy(sequence):
-    # If sequence is empty, return 0
     if len(sequence) == 0:
         return 0
-
-    # Count frequency of each box click
     values, counts = np.unique(sequence, return_counts=True)
     probs = counts / len(sequence)
     entropy = -np.sum(probs * np.log2(probs))
     return entropy
+
+# Apply button styling
+set_button_style()
 
 # App title
 st.title("3x3 Box Entropy Calculator")
