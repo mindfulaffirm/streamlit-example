@@ -22,7 +22,7 @@ if 'sequence' not in st.session_state:
 
 # Display 3x3 grid and handle box clicks
 for i in range(3):
-    col1, col2, col3 = st.beta_columns(3)
+    col1, col2, col3 = st.columns(3)  # Note the change here
     with col1:
         if st.button(f"Box {3*i + 1}"):
             st.session_state.sequence.append(3*i + 1)
@@ -32,6 +32,7 @@ for i in range(3):
     with col3:
         if st.button(f"Box {3*i + 3}"):
             st.session_state.sequence.append(3*i + 3)
+
 
 # Display recorded sequence
 st.write(f"Sequence: {st.session_state.sequence}")
